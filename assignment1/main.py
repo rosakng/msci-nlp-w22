@@ -37,7 +37,7 @@ def run_script():
     for index, line in enumerate(content):
         tokenized_line = []
         # substitute special characters with spaces
-        sub_special_chars = re.sub('[!"#$%&()*+/:;<=>@\[\]\\\\^`{|}~\t\n]', ' ', line.lower())
+        sub_special_chars = re.sub('[!"#$%&()*+/:;<=>@\[\]\\\\^`{|}~\t\n]', ' ', line)
         # strip line by white spaces and split by white spaces and iterate
         for split in sub_special_chars.strip().split():
             # for each value, split by common punctuations such as ".", ",", "?" and "-"
