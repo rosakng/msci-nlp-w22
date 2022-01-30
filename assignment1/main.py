@@ -10,7 +10,7 @@ import random
 
 def run_script():
     path_to_data = sys.argv[1]
-    stop_words = stopwords.words('english')
+    stop_words = set(stopwords.words('english'))
 
     with open(path_to_data + '/pos.txt', "r") as f:
         pos_content = f.readlines()
