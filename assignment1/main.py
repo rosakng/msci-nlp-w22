@@ -8,15 +8,19 @@ import sys
 import random
 
 
-def run_script():
-    path_to_data = sys.argv[1]
-    stop_words = set(stopwords.words('english'))
-
+# helper function that reads in the path and combines positive and negative text files
+def read_data(path_to_data):
     with open(path_to_data + '/pos.txt', "r") as f:
-        pos_content = f.readlines()
+        pos_content = f.read()
     with open(path_to_data + '/neg.txt', "r") as f:
-        neg_content = f.readlines()
-    content = pos_content + neg_content
+        neg_content = f.read()
+    return pos_content + '\n' + neg_content
+
+
+# script that tokenizes the combined pos.txt and neg.txt files
+def run_script():
+    stop_words = set(stopwords.words('english'))
+    content = re.split('.\n', read_data(sys.argv[1]))
     random.shuffle(content)
 
     out_data = ''
@@ -37,14 +41,14 @@ def run_script():
     for index, line in enumerate(content):
         tokenized_line = []
         # substitute special characters with spaces
-        sub_special_chars = re.sub('[!"#$%&()*+/:;<=>@\[\]\\\\^`{|}~\t\n]', ' ', line)
+        sub_special_chars = re.sub('[!"#$%&()*+/:;<=>@\[\]\\\\^`{|}~]', ' ', line.lower())
         # strip line by white spaces and split by white spaces and iterate
         for split in sub_special_chars.strip().split():
-            # for each value, split by common punctuations such as ".", ",", "?" and "-"
+            # optional: for each value, split by common punctuations such as ".", ",", "?" and "-"
             split_by_punctuation = re.split('[.*|?*|,*|-]', split)
             for word in split_by_punctuation:
                 tokens = []
-                # after splitting by punctuation, look for contractions in each word and split
+                # after splitting by punctuation, look for contractions in each word and tokenize
                 if len(word) > 0:
                     contractions = '\s|(n\'t)|\'m|(\'ll)|(\'ve)|(\'s)|(\'re)|(\'d)'
                     contracted = re.split(contractions, word)
@@ -56,8 +60,9 @@ def run_script():
         if tokenized_line:
             csv_line = '{}\n'.format(','.join(tokenized_line))
             out_data += csv_line
-            tokenized_line_ns = [token for token in tokenized_line if not token in stop_words]
-            csv_ns_line = '{}\n'.format(','.join(tokenized_line_ns))
+            # remove stop works for no stop word data structures
+            tokenized_ns_line = [token for token in tokenized_line if not token in stop_words]
+            csv_ns_line = '{}\n'.format(','.join(tokenized_ns_line))
             out_ns_data += csv_ns_line
 
             if index < train_size:
