@@ -11,17 +11,20 @@ import random
 # helper function that reads in the path and combines positive and negative text files
 def read_data(path_to_data):
     with open(path_to_data + '/pos.txt', "r") as f:
-        pos_content = f.read()
+        pos_content = f.readlines()
     with open(path_to_data + '/neg.txt', "r") as f:
-        neg_content = f.read()
-    return pos_content + '\n' + neg_content
+        neg_content = f.readlines()
+    all_lines = pos_content + neg_content
+    return list(zip(all_lines, [1]*len(pos_content) + [0]*len(neg_content)))
 
 
 # script that tokenizes the combined pos.txt and neg.txt files
 def run_script():
     stop_words = set(stopwords.words('english'))
-    content = re.split('.\n', read_data(sys.argv[1]))
+    content = read_data(sys.argv[1])
     random.shuffle(content)
+
+    labels_data = ''
 
     out_data = ''
     train_data = ''
@@ -39,9 +42,11 @@ def run_script():
 
     # read line by line or review by review
     for index, line in enumerate(content):
+        sentence = line[0]
+        label = line[1]
         tokenized_line = []
         # substitute special characters with spaces
-        sub_special_chars = re.sub('[!"#$%&()*+/:;<=>@\[\]\\\\^`{|}~]', ' ', line.lower())
+        sub_special_chars = re.sub('[!"#$%&()*+/:;<=>@\[\]\n\t\\\\^`{|}~]', ' ', sentence.lower())
         # strip line by white spaces and split by white spaces and iterate
         for split in sub_special_chars.strip().split():
             # optional: for each value, split by common punctuations such as ".", ",", "?" and "-"
@@ -60,6 +65,7 @@ def run_script():
         if tokenized_line:
             csv_line = '{}\n'.format(','.join(tokenized_line))
             out_data += csv_line
+            labels_data += '{}\n'.format(label)
             # remove stop works for no stop word data structures
             tokenized_ns_line = [token for token in tokenized_line if not token in stop_words]
             csv_ns_line = '{}\n'.format(','.join(tokenized_ns_line))
@@ -93,6 +99,10 @@ def run_script():
     with open('data/test_ns.csv', "w") as g:
         g.write(test_ns_data)
 
+    with open('data/labels.csv', "w") as g:
+        g.write(labels_data)
+
 
 if __name__ == '__main__':
     run_script()
+    # print(read_data("/Users/rosakang/workspace/MSCI598/assignment1Data/textstyletransferdata/sentiment"))
