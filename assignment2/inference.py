@@ -30,8 +30,9 @@ def get_predictions(path, classifier_type):
     return ['{} => {}'.format(line, get_classification(line, model, count_vectorizer, tfidf_transformer))
             for line in txt]
 
+
 if __name__ == '__main__':
     predictions = get_predictions(sys.argv[1], sys.argv[2])
     print('\n'.join(predictions))
 
-# python3 inference.py /Users/rosakang/workspace/MSCI598/MSCI-tutorials/data/raw/sample.txt mnb_uni
+# ex. python3 inference.py /Users/rosakang/workspace/MSCI598/MSCI-tutorials/data/raw/sample.txt mnb_uni

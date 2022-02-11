@@ -191,4 +191,4 @@ if __name__ == '__main__':
     }
     print(alpha_object)
 
-    # python3 main.py /Users/rosakang/workspace/msci-nlp-w22/assignment1/data
+    # ex. python3 main.py /Users/rosakang/workspace/msci-nlp-w22/assignment1/data
