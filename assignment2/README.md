@@ -7,8 +7,11 @@ containing the split from A1.
 
 *Running inference.py*
 
+Please ensure that the outputs(.pkl) files have already been generated in the `msci-nlp-w22/assignment2/data` directory.
+You can do this by running the main script first.
+
 Please cd into `msci-nlp-w22/assignment2` and run `python3 inference.py {path} {classifier_type}` where `path` is the 
-path to .txt file and `classifier_type` is the type of classifier to use, 
+path to .txt file and `classifier_type` is the type of classifier to use.
 i.e. `mnb_uni` for MultinomialNB classifier trained on unigram features with stopwords for classifying sentences in the .txt file
 
 ***

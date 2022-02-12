@@ -8,6 +8,7 @@ def get_classification(line, model, count_vectorizer, tfidf_transformer):
 
 
 def get_predictions(path, classifier_type):
+    # read txt file
     with open(path) as f:
         txt = f.readlines()
     txt = [line.strip() for line in txt]
@@ -27,6 +28,7 @@ def get_predictions(path, classifier_type):
     with open(tfidf_transformer_pkl, 'rb') as f:
         tfidf_transformer = pickle.load(f)
 
+    # return sentence with classification
     return ['{} => {}'.format(line, get_classification(line, model, count_vectorizer, tfidf_transformer))
             for line in txt]
 

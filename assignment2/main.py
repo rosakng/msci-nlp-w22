@@ -26,6 +26,7 @@ CLASSIFIERS_NGRAM = {
 def read_csv(path):
     with open(path) as f:
         data = f.readlines()
+    # read csv and return as a joined line
     return [' '.join(x.strip().split(',')) for x in data]
 
 
@@ -169,7 +170,6 @@ def run_script(use_validation_set, alpha, classifier_type, data):
 if __name__ == '__main__':
     # get all datasets once
     data = get_all_data(sys.argv[1])
-    # data = get_all_data("/Users/rosakang/workspace/msci-nlp-w22/assignment1/data")
 
     # set this boolean to true when we want to tune our model with the validation set
     # set this boolean to false when we want to use the test dataset to calculate final accuracy scores
