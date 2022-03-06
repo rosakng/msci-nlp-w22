@@ -9,7 +9,7 @@ from config import config
 import os
 
 
-def main(path, classifier):
+def main(path, activation):
     print("Loading tokenizer from data directory...\n")
     tokenizer_pkl = 'data/tokenizer.pkl'
     print("Loading data from {}".format(tokenizer_pkl))
@@ -25,8 +25,8 @@ def main(path, classifier):
     x_predict = tokenizer.texts_to_sequences([' '.join(seq[:config['max_seq_len']]) for seq in word_seq])
     x_predict = pad_sequences(x_predict, maxlen=config['max_seq_len'], padding='post', truncating='post')
 
-    print("Loading nn_{}.model from data directory...\n".format(classifier))
-    model_file_name = 'nn_' + classifier + '.model'
+    print("Loading nn_{}.model from data directory...\n".format(activation))
+    model_file_name = 'nn_' + activation + '.model'
     model = keras.models.load_model(os.path.join('data/', model_file_name))
 
     r = model.predict(x_predict)
@@ -45,5 +45,5 @@ def main(path, classifier):
 
 if __name__ == '__main__':
     path = sys.argv[1]
-    classifier = sys.argv[2]
-    main(path, classifier)
+    activation = sys.argv[2]
+    main(path, activation)

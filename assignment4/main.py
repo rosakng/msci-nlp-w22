@@ -87,7 +87,7 @@ def do_the_pickle(tokenizer):
         pickle.dump(tokenizer, f)
 
 
-def main(path_directory, classifier):
+def main(path_directory, activation):
     print("Loading data from path: ", path_directory)
     data = get_all_data(path_directory)
 
@@ -149,7 +149,7 @@ def main(path_directory, classifier):
     # flatted model's layer to into (batch, 1) shape
     model.add(Flatten())
     # add hidden layer with L2 norm regularization
-    model.add(Dense(config['hidden_layer_dim'], activation=classifier, kernel_regularizer=regularizers.l2(config['l2_dim']),
+    model.add(Dense(config['hidden_layer_dim'], activation=activation, kernel_regularizer=regularizers.l2(config['l2_dim']),
                     name='hidden_layer'))
     # add dropout
     model.add(Dropout(config['dropout_rate']))
@@ -174,12 +174,12 @@ def main(path_directory, classifier):
     print("Accuracy on Test Set = {0:4.3f}".format(acc))
 
     print("Saving model into data/ directory")
-    model.save('data/nn_' + classifier + '.model')
+    model.save('data/nn_' + activation + '.model')
 
     return model
 
 
 if __name__ == '__main__':
     path_to_splits = sys.argv[1]
-    classifier = sys.argv[2]
-    main(path_to_splits, classifier)
+    activation = sys.argv[2]
+    main(path_to_splits, activation)
