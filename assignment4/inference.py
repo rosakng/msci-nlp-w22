@@ -10,17 +10,18 @@ import os
 
 
 def main(path, activation):
-    print("Loading tokenizer from data directory...\n")
+    print("Loading tokenizer from data directory...")
     tokenizer_pkl = 'data/tokenizer.pkl'
-    print("Loading data from {}".format(tokenizer_pkl))
+    print("Loading data from {}\n".format(tokenizer_pkl))
     with open(tokenizer_pkl, 'rb') as f:
         tokenizer = pickle.load(f)
 
-    print("Reading in .txt file from path: {}".format(path))
+    print("Reading in .txt file from path: {}\n".format(path))
     with open(path) as f:
         text = f.readlines()
         print(text)
 
+    # Create predictions for sentences in text file
     word_seq = [text_to_word_sequence(sent) for sent in text]
     x_predict = tokenizer.texts_to_sequences([' '.join(seq[:config['max_seq_len']]) for seq in word_seq])
     x_predict = pad_sequences(x_predict, maxlen=config['max_seq_len'], padding='post', truncating='post')
@@ -30,15 +31,19 @@ def main(path, activation):
     model = keras.models.load_model(os.path.join('data/', model_file_name))
 
     r = model.predict(x_predict)
+    print("Predictions:")
     print(r)
+    # Classify prediction values into 1's and 0's
     classes = np.argmax(r, axis=-1)
+    print("Classes:")
     print(classes)
     results = []
     for i in classes:
-        if i==0:
+        if i == 0:
             results.append('NEGATIVE')
         else:
             results.append('POSITIVE')
+    print("Results:")
     print(results)
     return classes
 
